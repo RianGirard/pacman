@@ -6,96 +6,14 @@
         <title>PacMan!</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style type="text/css"> 
-            body {
-                background-color: black;
-            } 
-            * {
-                /* clearing out any of the browser default formatting*/
-                padding: 0px;
-                margin: 0px;
-                box-sizing: border-box;
-                /* This attribute "line-height" defines the space between two inline elements and removes the default 4px of space between rows (inline-block) */
-                line-height: 0;
-            }
-
-            div.row {
-                padding: 0px;
-                margin: 0px;
-            }
-            div.row div{    /*This applies attributes to the children of div.row  */
-                height: 20px;
-                width: 20px;
-                display: inline-block;
-            } 
-            div.brick{
-                background-color: blue;
-            }
-            div.coin{
-                background: url('coin.gif');
-                background-repeat: no-repeat;
-                background-position: center;
-            }
-            div.empty {
-
-            }
-
-            div#pacman {
-                background: url('web-munch-munch.gif');
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-                width: 20px;
-                height: 20px;
-                position: absolute;
-            }
-            div#pacman #South{
-                transform: rotate(90deg);
-            }
-            div#pacman #North{
-                transform: rotate(270deg);
-            }
-            div#pacman #South{
-                transform: rotate(180deg);
-            }
-
-
-            div.cherries {
-                background: url('fruit_cherry.gif');
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-            }
-            div#score {
-                border: 1px solid white;
-                width: 30px;
-                height: 20px;
-                color: white;
-                text-align: center;
-                padding-top: 9px;
-                position:absolute;
-                top: 10px;
-                left: 370px;
-
-            }
-
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-
         <div id="container">    <!-- not sure if #container required, but including it to follow example of instructor-->
             <div id="world"></div>
             <div id="pacman"></div>
-            <div id="score">0</div>
+            <div id="score"></div>
         </div>
-
-
-        <!-- List of features to build
-
-        1) Have JS display the world of brick/coin/etc - DONE!!
-        2) Have the pacman move up and down
-
-        --> 
 
         <script>
             var world = [
@@ -123,7 +41,6 @@
             }
 
             var score = 0;
-
 
             function displayWorld(){
                 var output = '';
@@ -154,17 +71,25 @@
                 document.getElementById('world').innerHTML = output;
             }
 
-            function displayPacman(){
+            function displayPacman(dir){
                 document.getElementById('pacman').style.top = pacman.x*20+"px";
                 document.getElementById('pacman').style.left = pacman.y*20+"px";
-                /* if (dir == up){
-                    #pacman #North; 
-                }*/
+                if(dir == 1){
+                    document.getElementById('pacman').style.transform = "rotate(180deg)";
+                }
+                if(dir == 2){
+                    document.getElementById('pacman').style.transform = "rotate(0deg)";
+                }
+                if(dir == 3){
+                    document.getElementById('pacman').style.transform = "rotate(270deg)";
+                } 
+                if(dir == 4){
+                    document.getElementById('pacman').style.transform = "rotate(90deg)";
+                }  
             }
 
-
             function displayScore(){
-                document.getElementById('score').innerHTML = score;
+                document.getElementById('score').innerHTML = `Score: ${score}`;
             }
 
             displayWorld();
@@ -174,21 +99,21 @@
             document.onkeydown = function(e){
                 if((e.keyCode == 37 && world[pacman.x][pacman.y-1] !== 2) && (e.keyCode == 37 && pacman.y >= 1)){
                     pacman.y--;
-                    /*displayPacman(left);*/
+                    var dir = 1;
                 }
                 else if(e.keyCode == 39 && world[pacman.x][pacman.y+1] !== 2){
                     pacman.y++;
-                    /*displayPacman();*/
+                    var dir = 2;
                 }
                 else if(e.keyCode == 38 && world[pacman.x-1][pacman.y] !== 2){
                     pacman.x--;
-                    /*displayPacman(up);*/
+                    var dir = 3;
                 }
                 else if(e.keyCode == 40 && world[pacman.x+1][pacman.y] !== 2){
                     pacman.x++;
-                    /*displayPacman(down);*/
+                    var dir = 4;
                 }
-                displayPacman();
+                displayPacman(dir);
 
                 if(world[pacman.x][pacman.y] == 1){
                     world[pacman.x][pacman.y] = 0;
@@ -196,19 +121,14 @@
                     displayWorld();
                     displayScore();
                 }
-
                 if(world[pacman.x][pacman.y] == 3){
                     world[pacman.x][pacman.y] = 0;
                     score+=50;
                     displayWorld();
                     displayScore();
                 }
-
                 // console.log(e.keyCode);
-
             }
-
-
         </script>
     </body>
 </html>
